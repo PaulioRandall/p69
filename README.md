@@ -6,7 +6,7 @@
 
 **P69** enables use of compile time tokens within CSS strings for Node based projects.
 
-It's just a glorified fiind and replace, i.e. it scans CSS strings for placeholder tokens which are substituted for user defined values.
+It's just a glorified find and replace, i.e. it scans CSS strings for placeholder tokens which are substituted for user defined values.
 
 > Create an arbitary nested object containing your tokens. There are no standards or conventions on how one should name and organise them. Just keep it simple and do what works, not what everyone else is doing!
 
@@ -15,17 +15,15 @@ It's just a glorified fiind and replace, i.e. it scans CSS strings for placehold
 - **P69 Svelte**: https://github.com/PaulioRandall/p69-svelte
 - **P69 Util**: https://github.com/PaulioRandall/p69-util
 
-## Contents
-
-- [Example](#example)
-- [Options](#options)
-- [Rules for Token Mappings](#rules-for-token-mappings)
-- [Escaping the prefix](#escaping-the-prefix)
-
-## Example
+## Example Usage
 
 ```js
 import P69 from 'p69'
+
+// This mapping has been crafted to demonstrate the kinds
+// of mappings available. It's not necessarily the best
+// way to define values. Do what works for you, not what
+// everyone else is doing.
 
 const mappings = {
 	color: {
@@ -62,13 +60,13 @@ const cssWithTokens = `
 }
 
 .my-class:hover {
-	color: &color.highlight;
+	color: $color.highlight;
 }
 `
 
-const css = P69.string(mappings, cssWithTokens)
+const css = P69(mappings, cssWithTokens)
 
-// Expect CSS to equal:
+// css:
 `
 .my-class {
 	color: burlywood;
@@ -82,14 +80,12 @@ const css = P69.string(mappings, cssWithTokens)
 `
 ```
 
-> You can pass multiple mappings. It will search each mapping in order until it finds a value, e.g. `P69.string([fonts, colors], cssWithTokens)`
-
-[^Back to contents](#contents)
+> You can pass multiple mappings. It will search each mapping in order until it finds a value, e.g. `P69([fonts, colors], cssWithTokens)`
 
 ## Options
 
 ```js
-P69.string(
+P69(
 	mappings,
 	cssWithTokens,
 	options: {
@@ -104,24 +100,17 @@ P69.string(
 )
 ```
 
-[^Back to contents](#contents)
-
 ## Rules for Token Mappings
 
 1. All tokens must be prefixed with `$`.
 2. Functions can have arguments, e.g. `$func(1, 2, 3)`.
-3. A function with no arguments needs no parenthesis, e.g. `$func` == `$func()`.
+3. A function with no arguments needs no parenthesis, e.g. `$func` is the same as `$func()`.
 4. String arguments to functions do not require quotation but single or double quotes may be used for escaping characters.
-5. There is no special escape character, instead create a mapping to handle escaping.
-6. Any value type is allowed as token value except undefined and object.
-7. Functions are invoked and the result returned as the token value.
-8. But a function cannot return undefined, object, or another function (because recursion is unnecessary and would just cause problems).
-9. Async functions are not allowed either; fetch any external data before you start processing.
-10. Nulls are resolved to empty strings, discarding any suffix.
-
-**Harmless bug:** you can pass arguments to a non-function but they're ignored. I may fix this in future.
-
-[^Back to contents](#contents)
+5. There is no special escape character, instead create a mapping to handle escaping (examples in the next section).
+6. Any value type is allowed as a token value except undefined and object.
+7. Functions are invoked and the result returned as the token value, but a function cannot return undefined, object, or another function.
+8. Async functions are not allowed either; fetch any external data before you start processing.
+9. Nulls are resolved to empty strings, discarding any suffix.
 
 ## Escaping the prefix
 
@@ -135,26 +124,19 @@ export const escapeMethods = {
 	$$: '$$',
 	$$$: '$$$',
 
-	// We can create a single function that handles an unbroken
-	// series of $.
+	// A better approach is to create a function that
+	// replaces with an unbroken series of $.
 	//
 	// $$ => $
 	// $$(2) => $$
 	// $$(3) => $$$
 	$: (n = 1) => '$'.repeat(n),
 
-	// Create a 'literal' function that returns its first argument.
+	// You could also create a function that returns its
+	// first argument as a literal value.
 	//
 	// $literal("$$$") => $$$
 	// $literal("$ one $$ two $$$ three") => $ one $$ two $$$ three
 	literal: (v = '') => v.toString(),
-
-	// The world's your Mollusc. Here's a quotation function.
-	//
-	// $quote('Lots of $$$') => "Lots of $$$"
-	// $quote('Lots of $$$', '`') => `Lots of $$$`
-	quote: (v, glyph = '"') => glyph + v.toString() + glyph,
 }
 ```
-
-[^Back to contents](#contents)

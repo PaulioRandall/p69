@@ -1,5 +1,5 @@
-import Scanner from '../scanner/Scanner.js'
-import Resolver from '../resolver/Resolver.js'
+import Scanner from './scanner/Scanner.js'
+import Resolver from './resolver/Resolver.js'
 import compileOptions from './compile_options.js'
 
 export default (mappings, cssWithTokens, options = {}) => {
