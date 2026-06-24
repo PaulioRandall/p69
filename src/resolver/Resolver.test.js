@@ -82,11 +82,28 @@ describe('Resolver', () => {
 
 		test('passes when value is a function with args', () => {
 			const resolver = new Resolver({
-				k: (ctx, a, b, c) => '' + a + b + c,
+				k: (a, b, c) => '' + a + b + c,
 			})
 
 			const act = resolver.resolve(['k'], ['a', 'b', 'c'])
 			expect(act).toEqual('abc')
+		})
+
+		test("functions contain context as 'this' value", () => {
+			let ctx = null
+
+			const mapping = {
+				// Note: Not possible to update bound context of
+				// arrow functions!
+				k: function () {
+					ctx = this
+					return null
+				},
+			}
+
+			new Resolver(mapping).resolve(['k'])
+
+			expect(ctx).toEqual({ mappings: [mapping] })
 		})
 
 		test('throws when value is missing', () => {

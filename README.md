@@ -4,7 +4,7 @@
 
 # P69
 
-**P69** enables use of compile time tokens within CSS strings for Node based projects. It injects user defined values into user placeholder tokens used within CSS strings.
+**P69** enables use of compile time tokens within CSS strings for Node based projects, i.e. it injects user defined values into placeholder tokens.
 
 - **P69**: https://github.com/PaulioRandall/p69
 - **P69 Files**: https://github.com/PaulioRandall/p69-files
@@ -16,10 +16,10 @@
 ```js
 import P69 from 'p69'
 
-// This mapping was crafted to demonstrate variosu kinds
-// of mappings. It's not necessarily the best way to define
-// values. Do what works for you, not what everyone else
-// is doing.
+// This mapping was crafted to demonstrate various kinds
+// of toke to value mappings available. It's does not
+// represent the optimal way to define values. Do what
+// works for you, not what everyone else is doing.
 
 const mapping = {
 	color: {
@@ -33,11 +33,7 @@ const mapping = {
 			lg: '1.2rem',
 		},
 	},
-	width: (ctx, size = 'md') => {
-		// ctx is an object currently only containing the
-		// mappings, i.e. { mappings }. This may be useful
-		// for those using indirection within their mappings.
-
+	width: (size = 'md') => {
 		const sizes = {
 			xs: '5rem',
 			sm: '10rem',
@@ -80,7 +76,34 @@ const css = P69(mapping, cssWithTokens)
 `
 ```
 
-Can also pass multiple mappings as an array. The mappings are searched in order and the first value found is used.
+### Function Mappers
+
+A context object is bound to _this_ value if the function allows rebinding, i.e. if the function was not created using the arrow notation `=>`.
+
+In JavaScript, using the arrow notation sets _this_ value based on the context in which the function was defined, which can't be changed. Access to the mapping list is rarely needed so arrow functions are perfectly fine to use. Just take care to use the `function` keyword if you need the mapping list.
+
+Currently, the context object only contains the array of mappings, i.e. `{ mappings }`. This may be useful for those using indirection.
+
+```js
+const mapping = {
+	smallestFontSizeFor: function() {
+		const ctx = this // = { mappings }
+		
+		const fontSizes = ctx.mappings.map(m => m.font.size.sm)
+		return Math.min(...fontSizes)
+	},
+	arrowFunc: (fontSizeCategory) => {
+		const ctx = this // = undefined
+
+		// You can not compute the smallest font size across
+		// all mappings using the arrow function.
+	}
+}
+```
+
+### Multiple Mappings
+
+You can also pass multiple mappings as an array. The mappings are searched in order and the first value found is used.
 
 ```js
 // This allows you to organise your mappings to what makes
@@ -97,10 +120,10 @@ P69([fonts, colors, sizes], cssWithTokens)
 ```
 
 ```js
-// It can also by used to enable default mappings that are
-// overridden by project specific mappings:
+// It can also by used to allow a default mapping to be
+// overridden by a project specific mapping:
 
-import defaultMapping from 'team-default-mappings'
+import defaultMapping from 'design-system-tokens'
 
 const customMapping = {
 	color: {
@@ -137,14 +160,14 @@ P69(
 
 1. All tokens must be prefixed with `$`.
 2. Functions can have arguments, e.g. `$func(1, 2, 3)`.
-3. A function with no arguments needs no parenthesis, e.g. `$func` is the same as `$func()`.
+3. A function with no arguments needs no parenthesis, e.g. `$func` is the same as `$func()`. However, including them may create more readable code.
 4. String arguments to functions do not require quotation but single or double quotes are recommended as they allow character escaping and communicate value type to the user or AI agent.
 5. There is no special escape character, instead create a mapping to handle escaping (examples in the next section).
 6. Any value type is allowed as a token value except undefined and object.
 7. Nulls are resolved to empty strings, discarding any suffix.
 8. Functions are invoked and the result returned as the token value, but a function cannot return undefined, object, or another function.
 9. Async functions are not allowed either; fetch any external data before you start processing.
-10. The CSS string is scanned only once so inject a new token will not cause a rescan. Instead, use a function to compute the value.
+10. The CSS string is scanned only once so tokens returned as values will not be parsed. Instead, use functions to compute values.
 
 ## Escaping `$`
 
@@ -173,8 +196,7 @@ export const escapeMethods = {
 	// $literal("$ one $$ two") => $ one $$ two
 	literal: (v = '') => v.toString(),
 
-	// Perhaps adding spaces between arguments like console
-	// logging does.
+	// Perhaps you could add spaces between arguments.
 	print: (...values) => values.reduce(
 		(result, v) => result + " " + v, //
 		"", // Empty string by default

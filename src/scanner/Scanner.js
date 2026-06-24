@@ -1,6 +1,7 @@
 import RuneReader from './RuneReader.js'
 
-// Scanner is an iterator class for scanning tokens within .p69 files.
+// Scanner is an iterator for scanning P69 tokens within
+// CSS strings.
 export default class Scanner {
 	constructor(p69_css) {
 		this._rr = new RuneReader(p69_css)
@@ -21,11 +22,11 @@ export default class Scanner {
 
 	// PARAMS := [ "(" ARGS ")" ]
 	_scanParams(name) {
-		const bookmark = this._rr.makeBookmark()
+		const bookmark = this._rr.bookmark()
 
 		this._rr.skipSpaces()
 		if (!this._rr.accept(/\(/)) {
-			this._rr.gotoBookmark(bookmark)
+			this._rr.goto(bookmark)
 			return []
 		}
 
@@ -131,13 +132,13 @@ export default class Scanner {
 			return null
 		}
 
-		const start = this._rr.makeBookmark()
+		const start = this._rr.bookmark()
 		this._rr.read() // skip prefix
 
 		const name = this._scanName()
 		const args = this._scanParams(name)
 		const suffix = this._scanSuffix()
-		const end = this._rr.makeBookmark()
+		const end = this._rr.bookmark()
 
 		return {
 			start: start.cpIdx,

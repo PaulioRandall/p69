@@ -88,7 +88,7 @@ export default class Resolver {
 	_invokeFunction(func, args) {
 		const stringyTypes = ['string', 'number', 'bigint', 'boolean', 'array']
 		const ctx = { mappings: this._mappings }
-		const value = func(ctx, ...args)
+		const value = func.call(ctx, ...args)
 		const type = this._identifyType(value)
 
 		if (stringyTypes.includes(type)) {

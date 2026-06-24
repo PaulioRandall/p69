@@ -52,7 +52,7 @@ describe('index.js', () => {
 			let unspecifiedArg = 'something'
 
 			const mapping = {
-				func: (ctx, a, b, c, d) => {
+				func: (a, b, c, d) => {
 					unspecifiedArg = d
 					return `${a}-${b}-${c}`
 				},
