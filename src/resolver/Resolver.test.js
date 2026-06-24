@@ -82,7 +82,7 @@ describe('Resolver', () => {
 
 		test('passes when value is a function with args', () => {
 			const resolver = new Resolver({
-				k: (a, b, c) => '' + a + b + c,
+				k: (ctx, a, b, c) => '' + a + b + c,
 			})
 
 			const act = resolver.resolve(['k'], ['a', 'b', 'c'])

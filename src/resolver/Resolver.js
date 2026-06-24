@@ -21,18 +21,18 @@ export default class Resolver {
 			}
 		}
 
-		throw new Error(`Unable to find token: $'${tokenPath.join('.')}'.`)
+		throw new Error(`Unable to find token: $${tokenPath.join('.')}.`)
 	}
 
 	_findToken(mapping, tokenPath) {
 		let value = mapping
 
-		for (const node of tokenPath) {
+		for (const segment of tokenPath) {
 			if (!isObject(value)) {
 				return undefined
 			}
 
-			value = value[node]
+			value = value[segment]
 		}
 
 		return value
@@ -87,7 +87,8 @@ export default class Resolver {
 
 	_invokeFunction(func, args) {
 		const stringyTypes = ['string', 'number', 'bigint', 'boolean', 'array']
-		const value = func(...args)
+		const ctx = { mappings: this._mappings }
+		const value = func(ctx, ...args)
 		const type = this._identifyType(value)
 
 		if (stringyTypes.includes(type)) {

@@ -1,29 +1,34 @@
 import Scanner from './scanner/Scanner.js'
 import Resolver from './resolver/Resolver.js'
-import compileOptions from './compile_options.js'
+import prepareOptions from './prepareOptions.js'
 
 export default (mappings, cssWithTokens, options = {}) => {
-	options = compileOptions(options)
+	options = prepareOptions(options)
 
 	if (isObject(mappings)) {
 		mappings = [mappings]
 	}
 
+	cssWithTokens = cssWithTokens.normalize('NFC')
 	const resolver = new Resolver(...mappings)
 
-	cssWithTokens = cssWithTokens.normalize('NFC')
-	return replaceAllTokens(resolver, cssWithTokens, options)
+	return replaceAllTokens(resolver, cssWithTokens, options.onError)
 }
 
 const isObject = (v) => {
-	return typeof v === 'object' && !Array.isArray(v) && v !== null
+	return (
+		typeof v === 'object' && //
+		!Array.isArray(v) &&
+		v !== null
+	)
 }
 
-const replaceAllTokens = (resolver, cssWithTokens, options) => {
+const replaceAllTokens = (resolver, cssWithTokens, onError) => {
 	const tokens = Scanner.scanAll(cssWithTokens)
 
-	// Work from back to front of the content string otherwise replacements at
-	// the start will fuck up start & end indexes.
+	// Work from back to front of the CSS string so
+	// replacements at the start don't screw up scanned
+	// token indexes later in the CSS.
 	tokens.reverse()
 
 	for (const tk of tokens) {
@@ -34,7 +39,7 @@ const replaceAllTokens = (resolver, cssWithTokens, options) => {
 			value = appendSuffix(value, tk.suffix)
 			cssWithTokens = replaceValue(cssWithTokens, value, tk.start, tk.end)
 		} catch (e) {
-			options.onError(e, tk)
+			onError(e, tk)
 		}
 	}
 

@@ -2,35 +2,34 @@ import compile from './index.js'
 
 const joinLines = (...lines) => lines.join('\n')
 
-const doProcessString = (valueMaps, content, config = {}) => {
-	return compile(valueMaps, content, {
-		filename: 'Test.svelte',
+const doCompile = (mapping, content, options = {}) => {
+	return compile(mapping, content, {
 		onError: (e) => {
 			throw e
 		},
-		...config,
+		...options,
 	})
 }
 
 describe('index.js', () => {
 	describe('compile', () => {
 		test('performs simple replacement', () => {
-			const valueMap = {
+			const mapping = {
 				green: 'forestgreen',
 			}
 
-			const act = doProcessString(valueMap, `$green`)
+			const act = doCompile(mapping, `$green`)
 			expect(act).toEqual('forestgreen')
 		})
 
 		test('performs multiple simple replacements', () => {
-			const valueMap = {
+			const mapping = {
 				green: 'forestgreen',
 				red: 'indianred',
 			}
 
-			const act = doProcessString(
-				valueMap,
+			const act = doCompile(
+				mapping,
 				joinLines(
 					'color: $green;',
 					'color: $red;',
@@ -52,14 +51,14 @@ describe('index.js', () => {
 		test('passes correct arguments to users value function', () => {
 			let unspecifiedArg = 'something'
 
-			const valueMap = {
-				func: (a, b, c, d) => {
+			const mapping = {
+				func: (ctx, a, b, c, d) => {
 					unspecifiedArg = d
 					return `${a}-${b}-${c}`
 				},
 			}
 
-			const act = doProcessString(valueMap, `$func(alpha, beta, charlie)`)
+			const act = doCompile(mapping, `$func(alpha, beta, charlie)`)
 			expect(act).toEqual('alpha-beta-charlie')
 			expect(unspecifiedArg).toBeUndefined()
 		})

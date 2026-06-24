@@ -3,10 +3,16 @@ const TTY_YELLOW = '\x1b[33m'
 const TTY_RESET = '\x1b[0m'
 
 export default (userOptions) => {
-	return {
+	const options = {
 		onError: defaultOnError,
 		...userOptions,
 	}
+
+	if (typeof options.onError !== 'function') {
+		throw new Error(`[P69] options.onError must be a function`)
+	}
+
+	return options
 }
 
 const defaultOnError = (err, token) => {
