@@ -3,12 +3,50 @@ import RuneReader from './RuneReader.js'
 // Scanner is an iterator for scanning P69 tokens within
 // CSS strings.
 export default class Scanner {
+	// scanAll is convenience function returning all tokens,
+	// in order of appearence,
+	static scanAll(p69_css) {
+		const sc = new Scanner(p69_css)
+		const result = []
+
+		for (let tk = sc.next(); tk != null; tk = sc.next()) {
+			result.push(tk)
+		}
+
+		return result
+	}
+
 	constructor(p69_css) {
 		this._rr = new RuneReader(p69_css)
 
 		this._prefix = '$'
 		this._escapedPrefix = this._escapeForRegex(this._prefix)
 		this._prefixRegex = new RegExp(this._escapedPrefix)
+	}
+
+	// next scans and returns the next token or null if
+	// the end of file reached.
+	next() {
+		if (!this._rr.seek(this._prefixRegex)) {
+			return null
+		}
+
+		const start = this._rr.bookmark()
+		this._rr.read() // skip prefix
+
+		const name = this._scanName()
+		const args = this._scanParams(name)
+		const suffix = this._scanSuffix()
+		const end = this._rr.bookmark()
+
+		return {
+			start: start.cpIdx,
+			end: end.cpIdx,
+			raw: this._rr.slice(start.runeIdx, end.runeIdx),
+			suffix: suffix,
+			path: name.split('.'),
+			args: args,
+		}
 	}
 
 	_escapeForRegex = (s) => {
@@ -123,44 +161,5 @@ export default class Scanner {
 	// SUFFIX := *white-space*
 	_scanSuffix() {
 		return this._rr.accept(/\s/) || ''
-	}
-
-	// nextToken scans and returns the next token or null if the end of file
-	// reached.
-	nextToken() {
-		if (!this._rr.seek(this._prefixRegex)) {
-			return null
-		}
-
-		const start = this._rr.bookmark()
-		this._rr.read() // skip prefix
-
-		const name = this._scanName()
-		const args = this._scanParams(name)
-		const suffix = this._scanSuffix()
-		const end = this._rr.bookmark()
-
-		return {
-			start: start.cpIdx,
-			end: end.cpIdx,
-			raw: this._rr.slice(start.runeIdx, end.runeIdx),
-			suffix: suffix,
-			path: name.split('.'),
-			args: args,
-		}
-	}
-
-	// scanAll is convenience function returning all tokens, in order of
-	// appearence,
-	static scanAll(p69_css) {
-		const sc = new Scanner(p69_css)
-		const result = []
-
-		let tk = null
-		while ((tk = sc.nextToken())) {
-			result.push(tk)
-		}
-
-		return result
 	}
 }

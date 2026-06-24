@@ -17,8 +17,8 @@
 import P69 from 'p69'
 
 // This mapping was crafted to demonstrate various kinds
-// of toke to value mappings available. It's does not
-// represent the optimal way to define values. Do what
+// of token to value mappings available. It's does not
+// represent the optimal way to define a mapping. Do what
 // works for you, not what everyone else is doing.
 
 const mapping = {
@@ -61,7 +61,6 @@ const cssWithTokens = `
 `
 
 const css = P69(mapping, cssWithTokens)
-
 // css:
 `
 .my-class {
@@ -86,10 +85,10 @@ Currently, the context object only contains the array of mappings, i.e. `{ mappi
 
 ```js
 const mapping = {
-	smallestFontSizeFor: function() {
+	smallestFontSizeFor: function () {
 		const ctx = this // = { mappings }
-		
-		const fontSizes = ctx.mappings.map(m => m.font.size.sm)
+
+		const fontSizes = ctx.mappings.map((m) => m.font.size.sm)
 		return Math.min(...fontSizes)
 	},
 	arrowFunc: (fontSizeCategory) => {
@@ -97,7 +96,7 @@ const mapping = {
 
 		// You can not compute the smallest font size across
 		// all mappings using the arrow function.
-	}
+	},
 }
 ```
 
@@ -197,9 +196,10 @@ export const escapeMethods = {
 	literal: (v = '') => v.toString(),
 
 	// Perhaps you could add spaces between arguments.
-	print: (...values) => values.reduce(
-		(result, v) => result + " " + v, //
-		"", // Empty string by default
-	)
+	print: (...values) =>
+		values.reduce(
+			(result, v) => result + ' ' + v, //
+			'' // Empty string by default
+		),
 }
 ```
