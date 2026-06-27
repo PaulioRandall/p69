@@ -4,20 +4,20 @@
 
 # P69
 
-**P69** enables use of compile time tokens within CSS strings for Node based projects, i.e. it injects user defined values into placeholder tokens.
+**P69** resolves _P69 Tokens_ within CSS strings, i.e. it injects user defined values into placeholder tokens.
 
 - **P69**: https://github.com/PaulioRandall/p69
 - **P69 Files**: https://github.com/PaulioRandall/p69-files
 - **P69 Svelte**: https://github.com/PaulioRandall/p69-svelte
 - **P69 Util**: https://github.com/PaulioRandall/p69-util
 
-## Example Usage
+## Basic Usage
 
 ```js
 import P69 from 'p69'
 
-// This mapping was crafted to demonstrate various kinds
-// of token to value mappings available. It's does not
+// This mapping was crafted to demonstrate the various
+// token to value mappings available. It's does not
 // represent the optimal way to define a mapping. Do what
 // works for you, not what everyone else is doing.
 
@@ -75,11 +75,11 @@ const css = P69(mapping, cssWithTokens)
 `
 ```
 
-### Function Mappers
+### Functions have 'this' Context
 
 A context object is bound to _this_ value if the function allows rebinding, i.e. if the function was not created using the arrow notation `=>`.
 
-In JavaScript, using the arrow notation sets _this_ value based on the context in which the function was defined, which can't be changed. Access to the mapping list is rarely needed so arrow functions are perfectly fine to use. Just take care to use the `function` keyword if you need the mapping list.
+In JavaScript, using the arrow notation sets _this_ value based on the context in which the function was defined. Access to the mapping list is rarely needed so arrow functions are perfectly fine to use. Just take care to use the `function` keyword instead if you need the execution context.
 
 Currently, the context object only contains the array of mappings, i.e. `{ mappings }`. This may be useful for those using indirection.
 
@@ -166,7 +166,7 @@ P69(
 7. Nulls are resolved to empty strings, discarding any suffix.
 8. Functions are invoked and the result returned as the token value, but a function cannot return undefined, object, or another function.
 9. Async functions are not allowed either; fetch any external data before you start processing.
-10. The CSS string is scanned only once so tokens returned as values will not be parsed. Instead, use functions to compute values.
+10. The CSS string is scanned only once so returning a token as a value will rerun the resolver. Instead, use functions to compute values.
 
 ## Escaping `$`
 
