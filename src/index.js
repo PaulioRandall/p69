@@ -1,9 +1,9 @@
 import Scanner from './scanner/Scanner.js'
 import Resolver from './resolver/Resolver.js'
-import prepareOptions from './prepareOptions.js'
+import prepOptions from './prepOptions.js'
 
 export default (mappings, cssWithTokens, options = {}) => {
-	options = prepareOptions(options)
+	options = prepOptions(options)
 
 	if (isObject(mappings)) {
 		mappings = [mappings]
