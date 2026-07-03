@@ -10,6 +10,7 @@ function resolve(testFile) {
 
 const reset = async () => {
 	await purge()
+	await sleep(250)
 	await copyTestdata()
 	await sleep(250)
 }

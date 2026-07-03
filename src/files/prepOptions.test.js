@@ -8,6 +8,8 @@ describe('prepOptions.js', () => {
 		expect(act).toEqual({
 			src: './src', //
 			dst: './src/app.css',
+			watch: false,
+			chokidar: {},
 		})
 	})
 
@@ -25,6 +27,8 @@ describe('prepOptions.js', () => {
 			src: path.resolve('./src'), //
 			dst: path.resolve('./src/styles.css'),
 			onError: f,
+			watch: false,
+			chokidar: {},
 		})
 	})
 })

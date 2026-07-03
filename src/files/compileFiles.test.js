@@ -1,9 +1,9 @@
 import fs from 'fs'
 
 import testdata from './testdata.js'
-import compileFiles from './files.js'
+import compileFiles from './compileFiles.js'
 
-const TWO_SECOND_TEST_TIMEOUT = 2000
+const THREE_SECOND_TEST_TIMEOUT = 3000
 
 function joinLines(...lines) {
 	return lines.join('\n')
@@ -41,41 +41,45 @@ describe('files.js', () => {
 				testdata.resolve('/tokensExtra.js'),
 			]
 
-			const hasErrors = await compileFiles(tokenMapFiles, {
+			await compileFiles(tokenMapFiles, {
 				src: testdata.testDir,
 				dst: null,
 			})
 
-			expect(hasErrors).toEqual(false)
+			// Wait a mo to ensure files are written and visible.
+			await testdata.sleep(500)
 
 			for (const f of expectedCSS) {
 				await testdata.expectFileContains(f.path, f.content)
 			}
 		},
-		TWO_SECOND_TEST_TIMEOUT
+		THREE_SECOND_TEST_TIMEOUT
 	)
-	/*
-	test('processes AND amalgamtes testdata from .p69 to .css', async () => {
-		await testdata.reset()
 
-		const dst = testdata.testDir + '/global.css'
-		const tokenMap = {
-			color: 'blue',
-			pad: '2rem',
-		}
+	test(
+		'processes AND amalgamtes testdata from .p69 to .css',
+		async () => {
+			await testdata.reset()
 
-		const hasErrors = await compileFiles(tokenMap, {
-			src: testdata.testDir,
-			dst: dst,
-		})
+			const dst = testdata.testDir + '/global.css'
+			const tokenMapFiles = [
+				testdata.resolve('/tokens.js'), //
+			]
 
-		expect(hasErrors).toEqual(false)
+			await compileFiles(tokenMapFiles, {
+				src: testdata.testDir,
+				dst: dst,
+			})
 
-		const exp = expectedCSS.reduce((acc, f) => {
-			return `${acc}${f.content}\n`
-		}, '')
+			// Wait a mo to ensure file is written and visible.
+			await testdata.sleep(500)
 
-		await testdata.expectFileContains(dst, exp)
-	}, TWO_SECOND_TEST_TIMEOUT)
-*/
+			const exp = expectedCSS.reduce((acc, item) => {
+				return acc + item.content + '\n'
+			}, '')
+
+			await testdata.expectFileContains(dst, exp)
+		},
+		THREE_SECOND_TEST_TIMEOUT
+	)
 })

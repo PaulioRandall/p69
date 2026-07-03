@@ -20,6 +20,7 @@ function listP69Files(src = '.') {
 	return fs //
 		.globSync(src)
 		.map((f) => path.resolve(f))
+		.sort()
 }
 
 function replaceFileExt(f, newExt) {

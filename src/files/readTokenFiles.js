@@ -1,4 +1,4 @@
-import os from '../os.js'
+import util from '../util.js'
 
 export default async function (tokenFiles) {
 	if (!Array.isArray(tokenFiles)) {
@@ -7,6 +7,7 @@ export default async function (tokenFiles) {
 		tokenFiles = [tokenFiles]
 	}
 
+	tokenFiles = tokenFiles.sort()
 	return await loadTokenMaps(tokenFiles)
 }
 
@@ -27,22 +28,14 @@ async function loadTokenMapsFromFile(filename) {
 
 	ensureDefaultValueIsValid(tokenMap, filename)
 
-	return isObject(tokenMap) ? [tokenMap] : tokenMap
+	return util.isObject(tokenMap) ? [tokenMap] : tokenMap
 }
 
 function ensureDefaultValueIsValid(v, filename) {
-	if (!Array.isArray(v) && !isObject(v)) {
+	if (!Array.isArray(v) && !util.isObject(v)) {
 		const t = typeof result
-		throw new Error(
-			`[P69-files] Expected default value to be array or object, not '${t}', within '${filename}'`
+		throw util.newError(
+			`Expected default value to be array or object, not '${t}', within '${filename}'`
 		)
 	}
-}
-
-function isObject(v) {
-	return (
-		typeof v === 'object' && //
-		!Array.isArray(v) &&
-		v !== null
-	)
 }

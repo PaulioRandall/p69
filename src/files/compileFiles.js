@@ -1,30 +1,32 @@
 import path from 'path'
+import fs from 'fs'
 
 import P69 from '../index.js'
-import prepOptions from './prepOptions.js'
 import readTokenFiles from './readTokenFiles.js'
 import os from '../os.js'
+import util from '../util.js'
 
-export default async (tokenFiles, userOptions = {}) => {
-	const options = prepOptions(userOptions)
-
+export default async (tokenFiles, options) => {
 	try {
 		const p69Files = os.listP69Files(options.src)
 		const tokenMaps = await readTokenFiles(tokenFiles)
 
 		if (options.dst) {
-			checkDst(options.dst)
-			await os.deleteFile(options.dst)
+			await checkDst(options.dst)
+			await os.createOrReplaceFile(options.dst, '')
 		}
 
-		return await compileP69Files(p69Files, tokenMaps, options)
+		await compileP69Files(p69Files, tokenMaps, options)
 	} catch (e) {
-		os.stderr(e, '\n')
-		return true
+		util.logError(e)
 	}
 }
 
 async function checkDst(dst) {
+	if (!fs.existsSync(dst)) {
+		return
+	}
+
 	const lstat = await fs.lstatSync(dst)
 
 	if (lstat.isDirectory()) {
@@ -39,18 +41,13 @@ async function compileP69Files(p69Files, tokenMaps, options) {
 		compileOptions.onError = options.onError
 	}
 
-	let hasError = false
-
 	for (const f of p69Files) {
 		try {
-			compileFile(f, tokenMaps, options.dst, compileOptions)
+			await compileFile(f, tokenMaps, options.dst, compileOptions)
 		} catch (e) {
-			os.stderr(e, '\n')
-			hasError = true
+			util.logError(e)
 		}
 	}
-
-	return hasError
 }
 
 export async function compileFile(

@@ -1,9 +1,12 @@
 import path from 'path'
+import util from '../util.js'
 
 const DEFAULT_OPTIONS = {
+	// onError (using P69 default)
 	src: './src', //
 	dst: './src/app.css',
-	// onError (using P69 default)
+	watch: false,
+	chokidar: {},
 }
 
 export default function (userOptions) {
@@ -15,6 +18,8 @@ export default function (userOptions) {
 
 	mergeUserOption(options, userOptions, 'src')
 	mergeUserOption(options, userOptions, 'dst')
+	mergeUserOption(options, userOptions, 'watch')
+	mergeUserOption(options, userOptions, 'chokidar')
 	mergeUserOption(options, userOptions, 'onError')
 
 	if (options.dst) {
@@ -23,6 +28,10 @@ export default function (userOptions) {
 
 	if (options.src) {
 		options.src = path.resolve(options.src)
+	}
+
+	if (options.watch && !util.isObject(options.chokidar)) {
+		throw util.newError(`options.chokidar must be an object`)
 	}
 
 	return options
