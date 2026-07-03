@@ -1,3 +1,5 @@
+import url from 'node:url'
+
 import util from '../util.js'
 
 export default async function (tokenFiles) {
@@ -23,7 +25,8 @@ async function loadTokenMaps(tokenFiles) {
 }
 
 async function loadTokenMapsFromFile(filename) {
-	const mod = await import(filename)
+	const importPath = url.pathToFileURL(filename)
+	const mod = await import(importPath.href)
 	const tokenMap = mod.default
 
 	ensureDefaultValueIsValid(tokenMap, filename)
