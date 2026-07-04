@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 import prepOptions from './prepOptions.js'
 import compileFiles from './compileFiles.js'
 import watchFiles from './watchFiles.js'

@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 import util from '../util.js'
 
 const DEFAULT_OPTIONS = {

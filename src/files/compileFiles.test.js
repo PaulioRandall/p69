@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'node:fs'
 
 import testdata from './testdata.js'
 import compileFiles from './compileFiles.js'

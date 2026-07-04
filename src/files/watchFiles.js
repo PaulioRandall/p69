@@ -1,5 +1,5 @@
+import path from 'node:path'
 import chokidar from 'chokidar'
-import path from 'path'
 
 import compileFiles from './compileFiles.js'
 import util from '../util.js'

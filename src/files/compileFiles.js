@@ -1,5 +1,5 @@
-import path from 'path'
-import fs from 'fs'
+import path from 'node:path'
+import fs from 'node:fs'
 
 import P69 from '../index.js'
 import readTokenFiles from './readTokenFiles.js'
