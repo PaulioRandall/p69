@@ -36,12 +36,14 @@ describe('files.js', () => {
 		async () => {
 			await testdata.reset()
 
-			const tokenMapFiles = [
-				testdata.resolve('/tokens.js'),
-				testdata.resolve('/tokensExtra.js'),
+			const tokenMaps = [
+				{
+					color: 'green',
+					pad: '8px',
+				},
 			]
 
-			await compileFiles(tokenMapFiles, {
+			await compileFiles(tokenMaps, {
 				src: testdata.testDir,
 				dst: null,
 			})
@@ -62,11 +64,14 @@ describe('files.js', () => {
 			await testdata.reset()
 
 			const dst = testdata.testDir + '/global.css'
-			const tokenMapFiles = [
-				testdata.resolve('/tokens.js'), //
+			const tokenMaps = [
+				{
+					color: 'green',
+					pad: '8px',
+				},
 			]
 
-			await compileFiles(tokenMapFiles, {
+			await compileFiles(tokenMaps, {
 				src: testdata.testDir,
 				dst: dst,
 			})

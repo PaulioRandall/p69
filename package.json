@@ -4,7 +4,7 @@
 	"description": "Injects compile time tokens into CSS",
 	"type": "module",
 	"license": "MIT",
-	"version": "4.0.0-rc-11",
+	"version": "4.0.0-rc-12",
 	"engines": {
 		"node": ">=24"
 	},
@@ -19,7 +19,8 @@
 	"exports": {
 		".": "./src/index.js",
 		"./files": "./src/files/index.js",
-		"./files/*": "./src/files/*.js"
+		"./readMappings": "./src/files/readMappings.js",
+		"./compileFiles": "./src/files/compileFiles.js"
 	},
 	"scripts": {
 		"update": "npx npm-check-updates -u && npm i",
