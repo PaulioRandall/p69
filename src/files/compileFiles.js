@@ -1,15 +1,13 @@
-import path from 'path'
-import fs from 'fs'
+import path from 'node:path'
+import fs from 'node:fs'
 
 import P69 from '../index.js'
-import readTokenFiles from './readTokenFiles.js'
 import os from '../os.js'
 import util from '../util.js'
 
-export default async (tokenFiles, options) => {
+export default async (tokenMaps, options) => {
 	try {
 		const p69Files = os.listP69Files(options.src)
-		const tokenMaps = await readTokenFiles(tokenFiles)
 
 		if (options.dst) {
 			await checkDst(options.dst)

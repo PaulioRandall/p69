@@ -1,5 +1,4 @@
 import url from 'node:url'
-
 import util from '../util.js'
 
 export default async function (tokenFiles) {

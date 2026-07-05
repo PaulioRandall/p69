@@ -18,7 +18,9 @@
 	],
 	"exports": {
 		".": "./src/index.js",
-		"./files": "./src/files/index.js"
+		"./files": "./src/files/index.js",
+		"./readMappings": "./src/files/readMappings.js",
+		"./compileFiles": "./src/files/compileFiles.js"
 	},
 	"scripts": {
 		"fmt": "prettier --log-level warn --write .",
