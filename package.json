@@ -23,6 +23,7 @@
 		"./compileFiles": "./src/files/compileFiles.js"
 	},
 	"scripts": {
+		"update": "npx npm-check-updates -u && npm i",
 		"fmt": "prettier --log-level warn --write .",
 		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand --passWithNoTests --testPathPatterns ./src/",
 		"audit": "npm run fmt && npm run test && cat ./ready-to-integrate.txt"
