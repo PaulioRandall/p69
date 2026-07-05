@@ -3,7 +3,7 @@ import path from 'node:path'
 import os from '../os.js'
 
 import prepOptions from './prepOptions.js'
-import readTokenFiles from './readTokenFiles.js'
+import readMappings from './readMappings.js'
 import compileFiles from './compileFiles.js'
 import watchFiles from './watchFiles.js'
 
@@ -14,7 +14,7 @@ export default async (tokenFiles, userOptions = {}) => {
 		if (options.watch) {
 			await watchFiles(tokenFiles, options)
 		} else {
-			const tokenMaps = await readTokenFiles(tokenFiles)
+			const tokenMaps = await readMappings(tokenFiles)
 			await compileFiles(tokenMaps, options)
 		}
 	} catch (e) {

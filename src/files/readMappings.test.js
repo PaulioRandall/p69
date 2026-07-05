@@ -1,12 +1,12 @@
-import readTokenFiles from './readTokenFiles.js'
+import readMappings from './readMappings.js'
 import testdata from './testdata.js'
 
-describe('readTokenFiles.js', () => {
+describe('readMappings.js', () => {
 	test('Read ES module token file', async () => {
 		await testdata.reset()
 
 		const tokenFile = testdata.resolve('/tokens.js')
-		const tokenMaps = await readTokenFiles(tokenFile)
+		const tokenMaps = await readMappings(tokenFile)
 
 		expect(tokenMaps).toEqual([
 			{
@@ -20,7 +20,7 @@ describe('readTokenFiles.js', () => {
 		await testdata.reset()
 
 		const tokenFile = testdata.resolve('/tokens.cjs')
-		const tokenMaps = await readTokenFiles(tokenFile)
+		const tokenMaps = await readMappings(tokenFile)
 
 		expect(tokenMaps).toEqual([
 			{
@@ -36,7 +36,7 @@ describe('readTokenFiles.js', () => {
 		const tokenFile = testdata.resolve('/tokens.js')
 		const tokenExtraFile = testdata.resolve('/tokensExtra.js')
 
-		const tokenMaps = await readTokenFiles([
+		const tokenMaps = await readMappings([
 			tokenFile, //
 			tokenExtraFile,
 		])
