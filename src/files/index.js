@@ -11,11 +11,11 @@ export default async (tokenFiles, userOptions = {}) => {
 	const options = prepOptions(userOptions)
 
 	try {
+		const tokenMaps = await readMappings(tokenFiles)
+		await compileFiles(tokenMaps, options)
+
 		if (options.watch) {
 			await watchFiles(tokenFiles, options)
-		} else {
-			const tokenMaps = await readMappings(tokenFiles)
-			await compileFiles(tokenMaps, options)
 		}
 	} catch (e) {
 		os.stderr(e)
