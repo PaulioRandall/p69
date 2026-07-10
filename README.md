@@ -12,6 +12,18 @@
 
 ## Basic Usage
 
+**package.json**
+
+```json
+{
+	"devDependencies": {
+		"@paulio/p69": "latest",
+	}
+}
+```
+
+**myScript.js**
+
 ```js
 import P69 from 'p69'
 

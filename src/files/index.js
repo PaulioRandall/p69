@@ -15,7 +15,7 @@ export default async (tokenFiles, userOptions = {}) => {
 		await compileFiles(tokenMaps, options)
 
 		if (options.watch) {
-			await watchFiles(tokenFiles, options)
+			watchFiles(tokenMaps, options)
 		}
 	} catch (e) {
 		os.stderr(e)
