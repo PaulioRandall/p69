@@ -4,7 +4,6 @@ import testutil from './testutil.js'
 import testfiles from './testfiles.js'
 import compileDir from './compileDir.js'
 
-import os from './os.js'
 import util from './util.js'
 
 const tokenMaps = [

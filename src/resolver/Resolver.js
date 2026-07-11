@@ -1,6 +1,4 @@
-function isObject(v) {
-	return typeof v === 'object' && !Array.isArray(v) && v !== null
-}
+import util from '../util.js'
 
 // Resolver resolves token paths into token values.
 export default class Resolver {
@@ -28,7 +26,7 @@ export default class Resolver {
 		let value = mapping
 
 		for (const segment of tokenPath) {
-			if (!isObject(value)) {
+			if (!util.isObject(value)) {
 				return undefined
 			}
 

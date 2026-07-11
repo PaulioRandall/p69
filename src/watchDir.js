@@ -12,7 +12,7 @@ export default (dir, tokenMaps, options) => {
 		compileDir(dir, tokenMaps, options)
 	}
 
-	util.log(`Watching directory: ${dir}`)
+	util.log(`Watching .p69 files: ${dir}`)
 
 	return chokidar
 		.watch(dir, chokidarOptions) //
@@ -23,7 +23,7 @@ export default (dir, tokenMaps, options) => {
 		.on('addDir', handler)
 		.on('unlinkDir', handler)
 		.on('error', (e) => {
-			util.logError(`Watcher error: ${e}`) //
+			util.logError(`Watcher error: ${e}\n`) //
 		})
 }
 

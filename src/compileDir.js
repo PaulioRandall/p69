@@ -1,5 +1,4 @@
 import compileFile from './compileFile.js'
-import os from './os.js'
 import util from './util.js'
 
 class CssFileBuilder {
@@ -19,7 +18,7 @@ class CssFileBuilder {
 	}
 
 	write() {
-		os.createOrReplaceWholeFile(this._filename, this._content + '\n')
+		util.createOrReplaceWholeFile(this._filename, this._content + '\n')
 	}
 
 	print() {
@@ -37,7 +36,7 @@ export default (dir, tokenMaps, options = {}) => {
 }
 
 function compileP69Files(dir, cssFileBuilder, tokenMaps, options) {
-	for (const p69File of os.listP69Files(dir)) {
+	for (const p69File of util.listP69Files(dir)) {
 		const css = compileFile(p69File, tokenMaps, {
 			onError: options.onError,
 			dryRun: options.dryRun || !!cssFileBuilder,
@@ -54,7 +53,7 @@ function createCssFileBuilder(dst) {
 		return null
 	}
 
-	if (os.isDir(dst)) {
+	if (util.isDir(dst)) {
 		throw util.newError(`dst must be a file, not a directory`)
 	}
 

@@ -1,15 +1,14 @@
 import compile from './compile.js'
-import os from './os.js'
 import util from './util.js'
 
 export default (filename, tokenMaps, options = {}) => {
-	const p69Content = os.readWholeFile(filename)
+	const p69Content = util.readWholeFile(filename)
 	const cssContent = compile(p69Content, tokenMaps, options.onError)
 	const content = cssContent.trim() + '\n'
 
 	if (options.dryRun !== true) {
 		dst = resolveDst(filename, options.dst)
-		os.createOrReplaceWholeFile(dst, content)
+		util.createOrReplaceWholeFile(dst, content)
 	}
 
 	return content
@@ -17,10 +16,10 @@ export default (filename, tokenMaps, options = {}) => {
 
 function resolveDst(filename, dst) {
 	if (!dst) {
-		return os.replaceFileExt(filename, 'css')
+		return util.replaceFileExt(filename, 'css')
 	}
 
-	if (os.isDir(dst)) {
+	if (util.isDir(dst)) {
 		throw util.newError(`dst must be a file, not a directory`)
 	}
 

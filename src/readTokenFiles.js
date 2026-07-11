@@ -13,15 +13,16 @@ export default function (tokenFiles) {
 
 	tokenFiles = tokenFiles.sort()
 
-	clearRequireCache()
+	clearRequireCache(tokenFiles)
 	return loadTokenMapsFromFiles(tokenFiles)
 }
 
-function clearRequireCache() {
+function clearRequireCache(tokenFiles) {
 	// Clear import so it loads changed files during
 	// development.
-	for (const filename in require.cache) {
-		delete require.cache[filename]
+	for (const filename of tokenFiles) {
+		const key = require.resolve(filename)
+		delete require.cache[key]
 	}
 }
 

@@ -2,7 +2,6 @@ import watchDir from './watchDir.js'
 import testutil from './testutil.js'
 import testfiles from './testfiles.js'
 import util from './util.js'
-import os from './os.js'
 
 const TEST_TIMEOUT = 5000
 
@@ -30,6 +29,9 @@ describe('watchDir.js', () => {
 
 				// Start watching
 				watcher = watchDir(testutil.testDir, tokenMaps, {
+					onError: (e) => {
+						throw e
+					},
 					dst: null,
 					chokidar: {
 						awaitWriteFinish: {
@@ -58,7 +60,7 @@ describe('watchDir.js', () => {
 					`}`,
 					``
 				)
-				os.createOrReplaceWholeFile(fileToChange, newContent)
+				util.createOrReplaceWholeFile(fileToChange, newContent)
 				await testutil.sleep(500)
 
 				// Check the file was recompiled and the .css file

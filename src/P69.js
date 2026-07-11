@@ -1,6 +1,6 @@
 import path from 'node:path'
 
-import os from './os.js'
+import util from './util.js'
 
 import readTokenFiles from './readTokenFiles.js'
 import compile from './compile.js'
@@ -92,10 +92,14 @@ export default class P69 {
 	// overide P69 default chokidar options on an
 	// option-by-option basis.
 	async watchTokenFiles(tokenFiles, options = {}) {
-		return watchTokenFiles(tokenFiles, this._setTokenMaps.bind(this), {
-			onError: this._onError,
-			...options,
-		})
+		return watchTokenFiles(
+			tokenFiles, //
+			this._setTokenMaps.bind(this),
+			{
+				onError: this._onError,
+				...options,
+			}
+		)
 	}
 
 	// setOnError sets the handler function that fires when
@@ -138,7 +142,7 @@ export default class P69 {
 	// load the token maps.
 	compileDir(dir, options = {}) {
 		if (this._tokenMaps.length === 0) {
-			warn(
+			util.warn(
 				'No token maps have been loaded. Compiling will be attempted but onError will be called for every token encountered.'
 			)
 		}
@@ -170,12 +174,4 @@ export default class P69 {
 			...options,
 		})
 	}
-}
-
-function warn() {
-	os.stdout(`[P69] Warning: ${msg}`)
-}
-
-function newError(msg) {
-	return new Error(`[P69] ${msg}`)
 }

@@ -2,11 +2,10 @@ import Scanner from './scanner/Scanner.js'
 import Resolver from './resolver/Resolver.js'
 
 import util from './util.js'
-import os from './os.js'
 
 const defaultOnError = (err, token) => {
-	os.stderr('[P69] ', err)
-	os.stderr('[P69] ', JSON.stringify(token, null, 2))
+	util.stderr('[P69] ', err)
+	util.stderr('[P69] ', JSON.stringify(token, null, 2))
 }
 
 export default function (p69Content, tokenMaps, onError = defaultOnError) {
