@@ -1,5 +1,5 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 const TTY_RED = '\x1b[31m'
 const TTY_YELLOW = '\x1b[33m'
@@ -29,38 +29,35 @@ function replaceFileExt(f, newExt) {
 	return `${f}.${newExt}`
 }
 
+function isDir(f) {
+	if (!fs.existsSync(f)) {
+		return false
+	}
+
+	const lstat = fs.lstatSync(dst)
+	return lstat.isDirectory()
+}
+
 function readWholeFile(f) {
 	return fs.readFileSync(f, { encoding: 'utf-8' })
 }
 
-function createOrReplaceFile(f, content) {
-	return fs.promises
-		.writeFile(f, content, { encoding: 'utf-8' })
-		.then(handleOK)
-		.catch(handleErr)
-}
-
-function appendToFile(f, content) {
-	return fs.promises
-		.appendFile(f, content, { encoding: 'utf-8' })
-		.then(handleOK)
-		.catch(handleErr)
+function createOrReplaceWholeFile(f, content) {
+	return fs.writeFileSync(f, content, {
+		encoding: 'utf-8',
+		flush: true,
+	})
 }
 
 function deleteFile(f) {
-	return fs.promises //
-		.rm(f, { force: true })
-		.then(handleOK)
-		.catch(handleErr)
+	return fs.rmSync(f, { force: true })
 }
 
-function handleOK(result) {
-	return [result, true]
-}
-
-function handleErr(err) {
-	stderr(err)
-	return [null, false]
+function deleteDir(f) {
+	return fs.rmSync(f, {
+		force: true,
+		recursive: true,
+	})
 }
 
 export default {
@@ -68,8 +65,8 @@ export default {
 	stderr,
 	listP69Files,
 	replaceFileExt,
+	isDir,
 	readWholeFile,
-	createOrReplaceFile,
-	appendToFile,
+	createOrReplaceWholeFile,
 	deleteFile,
 }

@@ -1,5 +1,9 @@
 import os from './os.js'
 
+function joinLines(...lines) {
+	return lines.join('\n')
+}
+
 function isObject(v) {
 	return (
 		typeof v === 'object' && //
@@ -21,6 +25,7 @@ function newError(msg) {
 }
 
 export default {
+	joinLines,
 	isObject,
 	log,
 	logError,

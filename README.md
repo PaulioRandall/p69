@@ -17,7 +17,7 @@
 ```json
 {
 	"devDependencies": {
-		"@paulio/p69": "latest",
+		"@paulio/p69": "latest"
 	}
 }
 ```

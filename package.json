@@ -17,10 +17,7 @@
 		"node"
 	],
 	"exports": {
-		".": "./src/index.js",
-		"./files": "./src/files/index.js",
-		"./readMappings": "./src/files/readMappings.js",
-		"./compileFiles": "./src/files/compileFiles.js"
+		".": "./src/P69.js"
 	},
 	"scripts": {
 		"update": "npx npm-check-updates -u && npm i",
