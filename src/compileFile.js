@@ -7,7 +7,7 @@ export default (filename, tokenMaps, options = {}) => {
 	const content = cssContent.trim() + '\n'
 
 	if (options.dryRun !== true) {
-		dst = resolveDst(filename, options.dst)
+		const dst = resolveDst(filename, options.dst)
 		util.createOrReplaceWholeFile(dst, content)
 	}
 
