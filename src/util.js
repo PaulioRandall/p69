@@ -72,7 +72,7 @@ function isObject(v) {
 	)
 }
 
-function warn() {
+function warn(msg) {
 	stdout(`[P69] Warning: ${msg}`)
 }
 

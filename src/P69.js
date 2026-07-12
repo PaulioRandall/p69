@@ -144,6 +144,11 @@ export default class P69 {
 	//
 	// A call to loadTokenMaps must be performed first to
 	// load the token maps.
+	//
+	// If $options.dst (CSS file path) is provided then all
+	// compiled CSS will be placed into $options.dst,
+	// otherwise individual .css files will be created or
+	// overidden in the same directory as the .p69 file.
 	compileDir(dir, options = {}) {
 		if (this._tokenMaps.length === 0) {
 			util.warn(
