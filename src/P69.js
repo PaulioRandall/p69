@@ -6,6 +6,7 @@ import readTokenFiles from './readTokenFiles.js'
 import compile from './compile.js'
 import compileFile from './compileFile.js'
 import compileDir from './compileDir.js'
+import watchTokenFiles from './watchTokenFiles.js'
 import watchDir from './watchDir.js'
 
 export default class P69 {
