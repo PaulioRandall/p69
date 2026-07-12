@@ -77,6 +77,10 @@ export default class P69 {
 		this._tokenMaps = tokenMaps
 	}
 
+	get tokenMaps() {
+		return this._tokenMaps
+	}
+
 	// loadTokenFiles does the same as P69.readTokenFiles but
 	// stores the result internally for use by the comile and
 	// watch methods. See P69.readTokenFiles for more details.
